@@ -15,6 +15,18 @@ class TransactionObject:
         TransactionObject.conn.close()
         TransactionObject.connected = False
 
+    def execute(self, sql_cmd, parms=None):
+        if TransactionObject.connected:
+            if parms is None:
+                TransactionObject.cur.execute(sql_cmd)
+            else:
+                TransactionObject.cur.execute(sql_cmd, parms)
+            return True
+        return False
+
+    def fetchall(self):
+        return TransactionObject.cur.fetchall()
+
     def persist(self):
         if TransactionObject.connected:
             TransactionObject.conn.commit()
